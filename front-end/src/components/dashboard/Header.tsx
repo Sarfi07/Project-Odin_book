@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({
   darkMode,
 }) => {
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-md p-4 flex justify-between items-center">
+    <header className="bg-white dark:bg-gray-900 shadow-md p-2 flex justify-between items-center">
       {/* Hamburger menu for mobile */}
       <button className="md:hidden focus:outline-none" onClick={onMenuClick}>
         <svg

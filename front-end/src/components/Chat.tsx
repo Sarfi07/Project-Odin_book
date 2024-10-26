@@ -26,6 +26,9 @@ const Chat: React.FC<ChatProps> = ({ isDarkMode }) => {
   const token = localStorage.getItem("token");
   const [error, setError] = useState("");
 
+  // followers posts should also be shown
+  // image widht and height
+
   useEffect(() => {
     if (token) {
       const ws = new WebSocket(`${wss_backend_url}`, token);

@@ -121,7 +121,7 @@ const Connections: React.FC<ConnectionsProps> = ({ isDarkMode }) => {
               className="flex items-center justify-between mb-2 cursor-pointer gap-2 my-4 border border-solid border-indigo-500/100  rounded p-4 hover:bg-black"
             >
               <div
-                className="flex justify-between w-3/4"
+                className="flex justify-between w-2/4"
                 onClick={() => navigate(`/people/${user.follower.id}`)}
               >
                 <img

@@ -101,7 +101,7 @@ const Post: React.FC<PostType> = ({
           <img
             src={img_url}
             alt="Post image"
-            className="w-full max-h-96 object-cover rounded-lg mb-4"
+            className="w-full max-h-fit object-cover rounded-lg mb-4"
           />
         )}
       </div>
