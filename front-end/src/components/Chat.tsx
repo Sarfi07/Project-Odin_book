@@ -27,6 +27,22 @@ const Chat: React.FC<ChatProps> = ({ isDarkMode }) => {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    console.log(token, wss_backend_url);
+    if (token) {
+      const ws = new WebSocket(`${wss_backend_url}`, token);
+      setSocket(ws);
+
+      ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        setMessages((prev) => [...prev, message]);
+      };
+
+      return () => {
+        ws.close();
+      };
+    }
+  }, [receiverId, token, wss_backend_url]);
+  useEffect(() => {
     const fetchMessages = async () => {
       const response = await fetch(`${backend_url}/user/chat/${receiverId}`, {
         // bug: old messages not coming to the receiver chat window
@@ -49,22 +65,6 @@ const Chat: React.FC<ChatProps> = ({ isDarkMode }) => {
 
     fetchMessages();
   }, [backend_url, token, receiverId]);
-
-  useEffect(() => {
-    if (token) {
-      const ws = new WebSocket(`${wss_backend_url}`, token);
-      setSocket(ws);
-
-      ws.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        setMessages((prev) => [...prev, message]);
-      };
-
-      return () => {
-        ws.close();
-      };
-    }
-  }, [receiverId, backend_url, token, wss_backend_url]);
 
   useEffect(() => {
     // Scroll to the bottom whenever new messages are added
