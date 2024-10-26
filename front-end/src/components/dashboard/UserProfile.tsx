@@ -21,6 +21,7 @@ const UserProfile: React.FC<ProfileProps> = ({ isDarkMode }) => {
   const [isFollowed, setIsFollowed] = useState<boolean>(false);
   const [posts, setPosts] = useState<[PostType] | []>([]);
   const [error, setError] = useState("");
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const { id } = useParams();
   const token = localStorage.getItem("token");
@@ -122,6 +123,7 @@ const UserProfile: React.FC<ProfileProps> = ({ isDarkMode }) => {
         isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"
       }`}
     >
+      {linkCopied && <Message message="Link" type="success" />}
       <div className="flex items-center">
         <img
           src={user.profileImage || "/default-avatar.png"}
@@ -163,7 +165,7 @@ const UserProfile: React.FC<ProfileProps> = ({ isDarkMode }) => {
               <Post
                 key={post.id}
                 {...post}
-                onShare={() => handleShare(post.id)}
+                onShare={() => handleShare({ postId: post.id, setLinkCopied })}
                 isDarkMode={isDarkMode}
               />
             ))

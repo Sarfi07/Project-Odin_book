@@ -3,6 +3,7 @@ import { PostType } from "../CustomTypes";
 import { useState, useEffect } from "react";
 import Message from "./Message";
 import { useNavigate } from "react-router-dom";
+import handleShare from "./handleShare";
 
 interface FeedProps {
   isDarkMode: boolean;
@@ -15,6 +16,7 @@ export const Feed: React.FC<FeedProps> = ({ isDarkMode }) => {
   const backend_url = import.meta.env.VITE_BACKEND_URL;
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const [linkCopied, setLinkCopied] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -55,10 +57,6 @@ export const Feed: React.FC<FeedProps> = ({ isDarkMode }) => {
     }
   }, [isDarkMode]);
 
-  const handleShare = (postId: string) => {
-    console.log(`Shared post ${postId}`);
-  };
-
   if (error) return <Message message={error} type="error" />;
   if (loading) return <>Loading...</>;
 
@@ -66,12 +64,14 @@ export const Feed: React.FC<FeedProps> = ({ isDarkMode }) => {
     <div className={`feed ${isDarkMode ? "dark" : ""}`}>
       {error && <p className="text-red-500 dark:text-red-400">{error}</p>}
 
+      {linkCopied && <Message message="Link copied" type="info" />}
+
       {posts.length
         ? posts.map((post) => (
             <Post
               key={post.id}
               {...post}
-              onShare={() => handleShare(post.id)}
+              onShare={() => handleShare({ postId: post.id, setLinkCopied })}
               isDarkMode={isDarkMode}
             />
           ))

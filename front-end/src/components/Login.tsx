@@ -56,6 +56,7 @@ const Login: React.FC<loginProps> = ({ setUserInfo }) => {
 
   const handleGuestSignIn = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`${back_end_url}/auth/guest-signin`, {
         method: "POST",
       });
@@ -64,6 +65,7 @@ const Login: React.FC<loginProps> = ({ setUserInfo }) => {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
+        setLoading(false);
         navigate("/");
       }
     } catch (error) {
@@ -163,7 +165,7 @@ const Login: React.FC<loginProps> = ({ setUserInfo }) => {
             onClick={handleGuestSignIn}
             className="text-indigo-600 hover:text-indigo-500 text-sm"
           >
-            Guest Sign in
+            {loading ? "Please wait..." : "Guest Sign in"}
           </button>
         </div>
       </div>

@@ -4,6 +4,8 @@ import like from "../assets/like.svg";
 import liked from "../assets/liked.svg";
 import deleteSvg from "../assets/delete.svg";
 import edit from "../assets/edit.svg";
+import handleShare from "./utils/handleShare";
+import Message from "./utils/Message";
 
 // Define PostType interface based on your post schema
 export interface PostType {
@@ -51,6 +53,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ isDarkMode }) => {
   const backend_url = import.meta.env.VITE_BACKEND_URL;
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const handleLike = async () => {
     if (!post) return;
@@ -170,6 +173,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ isDarkMode }) => {
         isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
       }`}
     >
+      {linkCopied && <Message message="Link copied" type="success" />}
       {post && (
         <div className="max-w-3xl mx-auto">
           {/* Post header */}
@@ -231,11 +235,24 @@ const PostDetail: React.FC<PostDetailProps> = ({ isDarkMode }) => {
 
             {/* Share Button */}
             <button
-              onClick={() => console.log("Share button clicked")}
+              onClick={() => handleShare({ postId: post.id, setLinkCopied })}
               className="text-blue-500"
               aria-label="Share this post"
             >
-              Share ({post.shareCount ?? 0})
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 12h3m4 0a8 8 0 11-16 0 8 8 0 0116 0z"
+                />
+              </svg>
             </button>
           </div>
 

@@ -1,20 +1,36 @@
-# Monorepo Template for Express.js Backend and Vite Frontend
+# Social Book
 
-This repository serves as a template for building a simple web application with a **back end** powered by **Express.js** (using ES6 syntax) and a **front end** built with **Vite**. This monorepo structure enables efficient management and development of both the backend and frontend projects.
+This is a social media web application where user can sgin up, post, comment, like and follow other users. The platform also supports real-time messaging and a light/dark mode toggle for an enhanced user experience.
+
+## Demo
+
+** todo **
 
 ## Features
 
-- **Express.js Backend**: A fully functional Express.js application using modern JavaScript (ES6) for a clean and modular codebase.
-- **Vite Frontend**: A fast and optimized frontend built with Vite, allowing for quick development and hot module replacement.
-- **Monorepo Structure**: Organized folder structure for managing multiple projects in a single repository.
-- **Easily Extendable**: Ready to be customized and extended for various web applications.
+> - User Authentication (Local, Github, and Google OAuth)
+> - Real-time messaging
+> - Post, like, and comment functionality
+> - Follow/unfollow users
+> - Dark Mode and light mode support
+> - Profile pages with followers/following posts
+> - Responsive UI
 
-## Getting Started
+## Tech Stack
 
-### Prerequisites
+> - Frontend: React, Tailwind CSS, Vite
+> - Backend: Node.js, Express
+> - Database: PostgreSQL (Prisma ORM)
+> - Authentication: Passport.js (Local, Github, Google strategies)
+> - WebSocket: <code>ws</code> library for real-time messaging
+> - Cloud Storage: Cloudinary for image uploads
 
-Ensure you have the following installed:
+## Usage
 
-- [Node.js](https://nodejs.org/en/download/) (version 14 or higher)
-- [npm](https://www.npmjs.com/get-npm) or [yarn](https://classic.yarnpkg.com/en/docs/install) for package management
+<ol> 
+<li>Register or log in using your credentials or OAuth </li>
+<li> After loggin in on the sidebar there are multple section one of which  is the home where posts of yours or from your follolwers or following will appear. </li>
+<li>Toggle between light and dark mode from an icon on the header </li>
+<li>Visit your profile page to view or update your profile and follow/unfollow users.</li>
 
+</ol>

@@ -11,7 +11,6 @@ const Post: React.FC<PostType> = ({
   img_url,
   createdAt,
   _count,
-  shareCount,
   onShare,
   isDarkMode,
   isLikedByUser,
@@ -147,7 +146,7 @@ const Post: React.FC<PostType> = ({
               d="M15 12h3m4 0a8 8 0 11-16 0 8 8 0 0116 0z"
             />
           </svg>
-          <span>{shareCount || 0} Shares</span>
+          <span>Share</span>
         </button>
       </div>
     </div>
