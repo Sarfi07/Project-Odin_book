@@ -32,6 +32,7 @@ export const Feed: React.FC<FeedProps> = ({ isDarkMode }) => {
           setError("Unauthorized");
           navigate("/login");
         }
+        navigate("/login");
         throw new Error("falied to fetch posts");
       }
 

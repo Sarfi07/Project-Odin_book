@@ -46,15 +46,6 @@ function App() {
     setDarkMode(!darkMode);
   };
 
-  // useEffect(() => {
-  //   console.log(sidebarOpen);
-  //   const s = document.getElementById("foo");
-  //   s?.classList.toggle("sidebar-enter-active");
-  //   s?.classList.toggle("sidebar-enter");
-  //   s?.classList.toggle("sidebar-exit-active");
-  //   s?.classList.toggle("sidebar-exit");
-  // }, [sidebarOpen]);
-
   return (
     <Router>
       <LocationHandler setSidebarOpen={setSidebarOpen} />

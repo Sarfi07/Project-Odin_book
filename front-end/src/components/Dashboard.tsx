@@ -28,6 +28,10 @@ const DashboardLayout: React.FC<DashboardProps> = ({
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
+  if (!token) {
+    navigate("/login");
+  }
   useEffect(() => {
     const verifyToken = async () => {
       if (!token) {
@@ -84,7 +88,7 @@ const DashboardLayout: React.FC<DashboardProps> = ({
       }
     };
     verifyToken();
-  }, [token, setUserInfo]);
+  }, [token, setUserInfo, navigate]);
 
   if (validUser === null) {
     return <div>Loaidng...</div>;
