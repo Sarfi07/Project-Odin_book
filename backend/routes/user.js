@@ -150,12 +150,24 @@ router.get(
         },
       });
 
-      const followingIds = followings.map((f) => f.following_id);
+      const followers = await prisma.following.findMany({
+        where: {
+          following_id: req.user.id,
+        },
+        select: {
+          follower_id: true,
+        },
+      });
+
+      const followersArray = followings.map((f) => f.following_id);
+      const followingsArray = followers.map((f) => f.follower_id);
+
+      const connectionsIds = [...followersArray, ...followingsArray];
       // get all posts by the user or followings
       let posts = await prisma.post.findMany({
         where: {
           author_id: {
-            in: [...followingIds, req.user.id],
+            in: [...connectionsIds, req.user.id],
           },
         },
         include: {
