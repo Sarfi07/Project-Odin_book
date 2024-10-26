@@ -1,5 +1,6 @@
 import React from "react";
 import { userObj } from "../CustomTypes";
+import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
   userInfo: userObj | null;
@@ -14,6 +15,7 @@ const Header: React.FC<HeaderProps> = ({
   onThemeToggle,
   darkMode,
 }) => {
+  const navigate = useNavigate();
   return (
     <header className="bg-white dark:bg-gray-900 shadow-md p-2 flex justify-between items-center">
       {/* Hamburger menu for mobile */}
@@ -35,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({
       </button>
 
       <div className="text-xl font-bold text-gray-800 dark:text-gray-200">
-        Odin Book
+        Social Beings
       </div>
 
       <div className="flex items-center space-x-4">
@@ -79,6 +81,7 @@ const Header: React.FC<HeaderProps> = ({
           className="h-14 w-14 rounded-full"
           src={userInfo ? userInfo.profileImage : "#"}
           alt="Profile"
+          onClick={() => navigate("/profile")}
         />
       </div>
     </header>
