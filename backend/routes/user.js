@@ -581,13 +581,23 @@ router.get(
         },
       });
 
+      const guestUsers = await prisma.user.findMany({
+        where: {
+          username: {
+            startsWith: "guest_",
+          },
+        },
+      });
+
       const followersArray = followers.map((f) => f.follower_id);
       const followingsArray = followings.map((f) => f.following_id);
+      const guestUserArray = guestUsers.map((g) => g.id);
       const requestArray = requested.map((r) => r.requestee_id);
       let arr = followersArray.concat(followingsArray);
       arr = arr.concat(requestArray);
+      arr = arr.concat(guestUserArray);
 
-      // find people other follower, following, and self
+      // find people other then follower, following, and self
       const peoples = await prisma.user.findMany({
         where: {
           id: {
