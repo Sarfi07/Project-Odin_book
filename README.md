@@ -4,7 +4,7 @@ This is a social media web application where user can sgin up, post, comment, li
 
 ## Demo
 
-** todo **
+Check out here: <https://socialbook-ten.vercel.app/>
 
 ## Features
 
