@@ -64,7 +64,7 @@ const Chat: React.FC<ChatProps> = ({ isDarkMode }) => {
         ws.close();
       };
     }
-  }, [receiverId, backend_url, token]);
+  }, [receiverId, backend_url, token, wss_backend_url]);
 
   useEffect(() => {
     // Scroll to the bottom whenever new messages are added
