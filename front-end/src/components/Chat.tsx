@@ -51,7 +51,7 @@ const Chat: React.FC<ChatProps> = ({ isDarkMode }) => {
 
   useEffect(() => {
     if (token) {
-      const ws = new WebSocket(`ws://${backend_url}`, token);
+      const ws = new WebSocket(`wss://${backend_url}`, token);
       setSocket(ws);
 
       ws.onmessage = (event) => {
