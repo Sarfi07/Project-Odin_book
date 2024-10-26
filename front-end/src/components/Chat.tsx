@@ -22,6 +22,7 @@ const Chat: React.FC<ChatProps> = ({ isDarkMode }) => {
   const { receiverId } = useParams();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const backend_url = import.meta.env.VITE_BACKEND_URL;
+  const wss_backend_url = import.meta.env.VITE_WSS_BACKEND_URL;
   const token = localStorage.getItem("token");
   const [error, setError] = useState("");
 
@@ -51,7 +52,7 @@ const Chat: React.FC<ChatProps> = ({ isDarkMode }) => {
 
   useEffect(() => {
     if (token) {
-      const ws = new WebSocket(`wss://${backend_url}`, token);
+      const ws = new WebSocket(`${wss_backend_url}`, token);
       setSocket(ws);
 
       ws.onmessage = (event) => {
