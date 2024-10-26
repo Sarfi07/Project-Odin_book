@@ -15,7 +15,7 @@ const Login: React.FC<loginProps> = ({ setUserInfo }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const back_end_url = import.meta.env.VITE_BACKEND_URL;
-
+  console.log(back_end_url);
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
