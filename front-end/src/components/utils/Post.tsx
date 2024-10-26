@@ -98,11 +98,13 @@ const Post: React.FC<PostType> = ({
 
         {/* Post Image (if available) */}
         {img_url && (
-          <img
-            src={img_url}
-            alt="Post image"
-            className="w-full max-h-fit object-cover rounded-lg mb-4"
-          />
+          <div className="flex justify-center">
+            <img
+              src={img_url}
+              alt="Post image"
+              className="max-h-[36rem] w-auto object-contain rounded-lg mb-4"
+            />
+          </div>
         )}
       </div>
       {/* Post Actions */}
