@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                      String             @id @default(uuid())
+  gitHubId                String?            @unique
+  googleId                String?            @unique
+  profileImage            String?
+  bio                     String?
+  name                    String
+  username                String             @unique
+  password                String?
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+  posts                   Post[]
+  followings              Following[]        @relation(name: "following")
+  followers               Following[]        @relation(name: "follower")
+  likes                   Like[]
+  comments                Comment[]
+  incoming_follow_request FollowingRequest[] @relation(name: "incomingFollowingRequest")
+  outgoing_follow_request FollowingRequest[] @relation(name: "outgoingFollowingRequest")
+
+  messagesSent     Message[] @relation("SenderMessages")
+  messagesReceived Message[] @relation("ReceiverMessages")
+}
+
+model Post {
+  id         String    @id @default(uuid())
+  content    String
+  author     User      @relation(references: [id], fields: [author_id])
+  author_id  String
+  img_url    String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  likes      Like[]
+  comments   Comment[]
+  shareCount Int?      @default(0)
+
+  @@index([createdAt])
+}
+
+model FollowingRequest {
+  id           String  @id @default(uuid())
+  requester    User    @relation(references: [id], fields: [requester_id], name: "outgoingFollowingRequest")
+  requester_id String
+  requestee    User    @relation(references: [id], fields: [requestee_id], name: "incomingFollowingRequest")
+  requestee_id String
+  accepted     Boolean @default(false)
+}
+
+model Following {
+  id           String @id @default(uuid())
+  follower     User   @relation(references: [id], fields: [follower_id], name: "following")
+  follower_id  String
+  following    User   @relation(references: [id], fields: [following_id], name: "follower")
+  following_id String
+
+  @@index([follower_id, following_id])
+}
+
+model Like {
+  id         String   @id @default(uuid())
+  post       Post?    @relation(references: [id], fields: [post_id])
+  post_id    String?
+  comment    Comment? @relation(references: [id], fields: [comment_id])
+  comment_id String?
+  author     User     @relation(references: [id], fields: [author_id])
+  author_id  String
+
+  @@index([post_id, comment_id])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String   @db.VarChar(500)
+  likes     Like[]
+  author    User     @relation(references: [id], fields: [author_id])
+  author_id String
+  post      Post     @relation(references: [id], fields: [post_id])
+  post_id   String
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  sender_id   String
+  receiver_id String
+  content     String
+  createdAt   DateTime @default(now())
+
+  sender   User @relation("SenderMessages", fields: [sender_id], references: [id])
+  receiver User @relation("ReceiverMessages", fields: [receiver_id], references: [id])
+}
