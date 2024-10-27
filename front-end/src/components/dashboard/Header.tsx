@@ -1,6 +1,7 @@
 import React from "react";
 import { userObj } from "../CustomTypes";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logo.png";
 
 interface HeaderProps {
   userInfo: userObj | null;
@@ -36,7 +37,15 @@ const Header: React.FC<HeaderProps> = ({
         </svg>
       </button>
 
-      <div className="text-xl font-bold text-gray-800 dark:text-gray-200">
+      <div
+        onClick={() => navigate("/", { replace: true })}
+        className="flex text-xl font-bold text-gray-800 dark:text-gray-200 cursor-pointer"
+      >
+        <img
+          className="w-8 rounded rounded-full mr-2"
+          src={logo}
+          alt="Social Beings"
+        />
         Social Beings
       </div>
 
@@ -78,10 +87,10 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Profile picture */}
         <img
-          className="h-14 w-14 rounded-full"
+          className="h-14 w-14 rounded-full cursor-pointer"
           src={userInfo ? userInfo.profileImage : "#"}
           alt="Profile"
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate("/profile", { replace: true })}
         />
       </div>
     </header>

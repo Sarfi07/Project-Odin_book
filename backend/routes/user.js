@@ -30,9 +30,43 @@ router.get("/", async (req, res) => {
       },
     });
 
-    return res.json({ user });
+    let posts = await prisma.post.findMany({
+      where: {
+        author_id: user.id,
+      },
+      include: {
+        author: {
+          select: {
+            name: true,
+            profileImage: true,
+            username: true,
+          },
+        },
+        likes: {
+          select: {
+            author_id: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comments: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc", // sorting by newest posts
+      },
+    });
+
+    posts = posts.map((post) => ({
+      ...post,
+      isLikedByUser: post.likes.some((like) => like.author_id === user.id),
+    }));
+
+    return res.json({ user, posts });
   } catch (err) {
-    console.error("Db error");
+    console.error("Db error", err);
     return res.json({ message: "db error", err });
   }
 });
@@ -399,6 +433,30 @@ router.get("/posts/:postId/comments", async (req, res) => {
 
 router
   .route("/posts/:postId/comment")
+  .get(async (req, res) => {
+    try {
+      const { postId } = req.params;
+
+      const comments = await prisma.comment.findMany({
+        where: {
+          post_id: postId,
+        },
+        include: {
+          author: {
+            select: {
+              name: true,
+              profileImage: true,
+            },
+          },
+        },
+      });
+
+      if (comments) return res.json({ comments });
+      return res.status(404);
+    } catch (err) {
+      return res.json({ err });
+    }
+  })
   .post(async (req, res) => {
     try {
       const { content } = req.body;

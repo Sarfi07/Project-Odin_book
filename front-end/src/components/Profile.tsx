@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import edit from "../assets/edit.svg";
 import ProfileImageUpload from "./utils/ProfileImageUpload";
 import Message from "./utils/Message";
+import EditForm from "./utils/ProfileEditForm";
+import { PostType } from "./CustomTypes";
+import Post from "./utils/Post";
+import handleShare from "./utils/handleShare";
 
 interface ProfileProps {
   isDarkMode: boolean;
@@ -27,11 +31,14 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
   const [error, setError] = useState("");
   const backend_url = import.meta.env.VITE_BACKEND_URL;
   const token = localStorage.getItem("token");
+  const [editFormOpen, setEditFormOpen] = useState(false);
+  const [posts, setPosts] = useState<PostType[]>([]);
+  const [linkCopied, setLinkCopied] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${backend_url}/user/`, {
+        const response = await fetch(`${backend_url}/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -44,6 +51,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
           followersCount: data.user._count.followers,
           followingsCount: data.user._count.followings,
         };
+        setPosts(data.posts);
         setUser(fetchedUser);
         setFormData(fetchedUser); // Initialize form fields with user data
       } catch (err) {
@@ -131,6 +139,10 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
     }
   };
 
+  const handleProfileEditOpen = () => {
+    setEditFormOpen(!editFormOpen);
+  };
+
   if (error) return <Message message={error} type="error" />;
 
   return (
@@ -140,6 +152,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
       }`}
       id="foo"
     >
+      {linkCopied && <Message message="Link copied" type="info" />}
       {message && <Message message={message} type="info" />}
       {user ? (
         <div
@@ -172,124 +185,48 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
               </span>
             </div>
           </div>
-
-          {/* Edit Profile Form */}
-          <form onSubmit={handleSubmit} className="space-y-4 text-black">
-            <div>
-              <label
-                className={`block text-sm font-medium mb-1 ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Name:
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData?.name || ""}
-                onChange={handleChange}
-                required
-                className={`w-full px-4 py-2 border rounded-md focus:ring focus:ring-blue-300 ${
-                  isDarkMode
-                    ? "bg-gray-700 text-white"
-                    : "bg-gray-100 text-black"
-                }`}
-              />
-            </div>
-
-            <div>
-              <label
-                className={`block text-sm font-medium mb-1 ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Bio:
-              </label>
-              <textarea
-                name="bio"
-                value={formData?.bio || ""}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  isDarkMode
-                    ? "bg-gray-700 text-white"
-                    : "bg-gray-100 text-black"
-                }`}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Username:
-              </label>
-              <input
-                type="text"
-                name="username"
-                value={formData?.username || ""}
-                onChange={handleChange}
-                required
-                className={`w-full px-4 py-2 border rounded-md focus:ring focus:ring-blue-300 ${
-                  isDarkMode
-                    ? "bg-gray-700 text-white"
-                    : "bg-gray-100 text-black"
-                }`}
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
-            >
-              Save Changes
-            </button>
-          </form>
-
-          {/* Change Password Form */}
-          <form
-            onSubmit={handlePasswordSubmit}
-            className="mt-6 space-y-4 text-black"
+          <button
+            className="bg-blue-700 p-2.5 px-3 rounded rounded-lg hover:bg-blue-900"
+            onClick={handleProfileEditOpen}
           >
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Old Password:
-              </label>
-              <input
-                type="password"
-                name="oldPassword"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-                required
-                className={`w-full px-4 py-2 border rounded-md focus:ring focus:ring-blue-300 ${
-                  isDarkMode
-                    ? "bg-gray-700 text-white"
-                    : "bg-gray-100 text-black"
-                }`}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                New Password:
-              </label>
-              <input
-                type="password"
-                name="newPassword"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                className={`w-full px-4 py-2 border rounded-md focus:ring focus:ring-blue-300 ${
-                  isDarkMode
-                    ? "bg-gray-700 text-white"
-                    : "bg-gray-100 text-black"
-                }`}
-              />
-            </div>
+            Edit Your Profile
+          </button>
+          {editFormOpen && (
+            <EditForm
+              handleChange={handleChange}
+              handlePasswordSubmit={handlePasswordSubmit}
+              handleSubmit={handleSubmit}
+              setNewPassword={setNewPassword}
+              setOldPassword={setOldPassword}
+              newPassword={newPassword}
+              oldPassword={oldPassword}
+              formData={formData}
+              isDarkMode={isDarkMode}
+            />
+          )}
 
-            <button
-              type="submit"
-              className="w-full px-4 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
-            >
-              Change Password
-            </button>
-          </form>
+          {posts && (
+            <div className="mt-4">
+              <hr />
+              <br />
+              <h2 className="text-center font-bold text-lg underline italic mb-4">
+                You Posts
+              </h2>
+
+              {posts.length
+                ? posts.map((post) => (
+                    <Post
+                      key={post.id}
+                      {...post}
+                      onShare={() =>
+                        handleShare({ postId: post.id, setLinkCopied })
+                      }
+                      isDarkMode={isDarkMode}
+                    />
+                  ))
+                : "No posts found"}
+            </div>
+          )}
         </div>
       ) : (
         <p className="text-center text-lg">Loading user data...</p>

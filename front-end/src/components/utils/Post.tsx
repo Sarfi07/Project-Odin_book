@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PostType } from "../CustomTypes";
 import { useNavigate } from "react-router-dom";
 import like from "../../assets/like.svg";
 import liked from "../../assets/liked.svg";
+import CommentsComp from "./Comments";
+
+interface CommentType {
+  id: string;
+  content: string;
+  author: {
+    name: string;
+    profileImage: string;
+  };
+  createdAt: string;
+}
 
 const Post: React.FC<PostType> = ({
   id,
@@ -21,6 +32,26 @@ const Post: React.FC<PostType> = ({
   const [likesCount, setLikesCount] = useState(_count.likes);
   const [likedByUser, setLikedByUser] = useState(isLikedByUser);
   const navigate = useNavigate();
+  const [openComments, setOpenComments] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [comments, setComments] = useState<CommentType[]>([]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      const response = await fetch(`${backend_url}/user/posts/${id}/comments`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch comments");
+      const data = await response.json();
+      console.log(data);
+      setComments(data);
+    };
+
+    fetchComments();
+  }, []);
 
   const handleLike = async () =>
     // id: string,
@@ -59,6 +90,28 @@ const Post: React.FC<PostType> = ({
         setLikedByUser(likedByUser);
       }
     };
+
+  const handleCommentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`${backend_url}/user/posts/${id}/comment`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: newComment }),
+      });
+
+      const data = await response.json();
+      setComments([data.comment, ...comments]);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+    }
+  };
+
   return (
     <div
       className={`rounded-lg shadow-md p-4 mb-4 m-auto ${
@@ -125,6 +178,17 @@ const Post: React.FC<PostType> = ({
           <span>{likesCount} Likes</span>
         </button>
 
+        <button
+          className={`flex items-center space-x-2 ${
+            isDarkMode
+              ? "text-gray-400 hover:text-green-300"
+              : "text-gray-700 hover:text-green-500"
+          }`}
+          onClick={() => setOpenComments(!openComments)}
+        >
+          {comments && comments.length} Comments
+        </button>
+
         {/* Share */}
         <button
           className={`flex items-center space-x-2 ${
@@ -151,6 +215,16 @@ const Post: React.FC<PostType> = ({
           <span>Share</span>
         </button>
       </div>
+
+      {openComments && (
+        <CommentsComp
+          handleCommentSubmit={handleCommentSubmit}
+          setNewComment={setNewComment}
+          newComment={newComment}
+          isDarkMode={isDarkMode}
+          comments={comments}
+        />
+      )}
     </div>
   );
 };
