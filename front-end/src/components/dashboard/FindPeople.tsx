@@ -9,6 +9,7 @@ interface FPprops {
 
 const FindPeople: React.FC<FPprops> = ({ isDarkMode }) => {
   const [peoples, setPeoples] = useState<Person[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
@@ -29,6 +30,7 @@ const FindPeople: React.FC<FPprops> = ({ isDarkMode }) => {
           setError(response.statusText);
         }
         const data = await response.json();
+        console.log(data);
         setPeoples(data.peoples);
       } catch (err) {
         console.error("Error fetching peoples:", err);
@@ -42,18 +44,34 @@ const FindPeople: React.FC<FPprops> = ({ isDarkMode }) => {
     navigate(`/people/${person.id}`);
   };
 
+  const filteredPeoples = peoples.filter((person) =>
+    person.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (error) return <Message message={error} type="error" />;
 
   return (
     <div
-      className={`asdf container mx-auto p-4 ${
+      className={`container mx-auto p-4 ${
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
       }`}
     >
       <h1 className="text-xl font-bold mb-4">Find People</h1>
+
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Search by username"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className={`w-full p-2 mb-4 rounded-lg ${
+          isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"
+        } border border-gray-300`}
+      />
+
       <div className="grid grid-cols-1 gap-4">
-        {peoples.length > 0 ? (
-          peoples.map((person) => (
+        {filteredPeoples.length > 0 ? (
+          filteredPeoples.map((person) => (
             <div
               key={person.username}
               className={`${
@@ -66,7 +84,7 @@ const FindPeople: React.FC<FPprops> = ({ isDarkMode }) => {
                 alt={person.name}
                 className="w-16 h-16 rounded-full"
               />
-              <div className="mx-auto text-wrap">
+              <div className="mx-auto">
                 <h2 className="font-semibold">{person.name}</h2>
                 <p className="text-gray-500">@{person.username}</p>
               </div>

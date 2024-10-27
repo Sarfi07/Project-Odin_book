@@ -196,12 +196,23 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
               </span>
             </div>
           </div>
-          <button
-            className="bg-blue-700 p-2.5 px-3 rounded rounded-lg hover:bg-blue-900"
-            onClick={handleProfileEditOpen}
-          >
-            Edit Your Profile
-          </button>
+          <div className="flex justify-between">
+            <button
+              className="bg-blue-700 p-2.5 px-3 rounded rounded-lg hover:bg-blue-900"
+              onClick={handleProfileEditOpen}
+            >
+              Edit Your Profile
+            </button>
+            <button
+              className="bg-red-700 p-2.5 px-3 rounded rounded-lg hover:bg-red-900"
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/login");
+              }}
+            >
+              Log Out
+            </button>
+          </div>
           {editFormOpen && (
             <EditForm
               handleChange={handleChange}
@@ -215,7 +226,6 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
               isDarkMode={isDarkMode}
             />
           )}
-
           {posts && (
             <div className="mt-4">
               <hr />
