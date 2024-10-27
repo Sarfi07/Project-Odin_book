@@ -174,7 +174,9 @@ const Post: React.FC<PostType> = ({
             src={likedByUser ? liked : like}
             alt={likedByUser ? "Unlike" : "Like"}
           />
-          <span>{likesCount} Likes</span>
+          <span>
+            {likesCount} Like{likesCount > 1 && "s"}
+          </span>
         </button>
 
         <button
