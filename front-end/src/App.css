@@ -20,19 +20,18 @@ header {
 }
 
 .sidebar {
-  grid-area: sidebar;
-
   height: 90vh;
 }
 
 aside {
-  min-height: 92vh;
+  grid-area: sidebar;
+  height: 92vh;
 }
 
 .main-content {
-  grid-area: main;
-  padding: 1rem 4rem;
-  overflow-x: hidden;
+  /* grid-area: main; */
+  padding: 8rem 4rem;
+  /* overflow-x: hidden; */
 }
 
 .main-content::-webkit-scrollbar {

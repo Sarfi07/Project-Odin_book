@@ -33,9 +33,6 @@ const DashboardLayout: React.FC<DashboardProps> = ({
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  if (!token) {
-    navigate("/login");
-  }
   useEffect(() => {
     const verifyToken = async () => {
       if (!token) {
@@ -64,8 +61,6 @@ const DashboardLayout: React.FC<DashboardProps> = ({
 
         if (data.success) {
           const fetchUserInfo = async () => {
-            const token = localStorage.getItem("token");
-
             const res = await fetch(
               `${import.meta.env.VITE_BACKEND_URL}/user`,
               {
@@ -98,21 +93,23 @@ const DashboardLayout: React.FC<DashboardProps> = ({
   }
 
   return (
-    <div className="app-container flex flex-col min-h-screen">
+    <div className="app-container flex flex-col h-screen">
       <Header
         userInfo={userInfo}
         onThemeToggle={handleThemeToggle}
         darkMode={darkMode}
       />
 
-      <div className="flex flex-grow">
+      <div className="flex flex-grow overflow-hidden">
         {/* Sidebar for larger screens */}
-        <div className="hidden md:flex md:w-64">
+        <div className="hidden md:flex md:w-64 h-full bg-gray-800">
           <Sidebar />
         </div>
 
         {/* Main Content Area */}
-        <div className="main-content flex-grow">{children}</div>
+        <div className="main-content flex-grow overflow-y-auto p-8">
+          {children}
+        </div>
       </div>
 
       {/* Bottom Navigation for mobile */}

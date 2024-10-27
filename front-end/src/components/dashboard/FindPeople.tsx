@@ -52,7 +52,7 @@ const FindPeople: React.FC<FPprops> = ({ isDarkMode }) => {
 
   return (
     <div
-      className={`container mx-auto p-4 ${
+      className={`container mx-auto p-4 rounded rounded-lg ${
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
       }`}
     >
