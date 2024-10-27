@@ -26,7 +26,7 @@ header {
 }
 
 aside {
-  height: 92vh;
+  min-height: 92vh;
 }
 
 .main-content {
