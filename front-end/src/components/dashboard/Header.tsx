@@ -5,38 +5,24 @@ import logo from "../../assets/logo.png";
 
 interface HeaderProps {
   userInfo: userObj | null;
-  onMenuClick: () => void;
   onThemeToggle: () => void; // New prop for toggling theme
   darkMode: boolean; // Pass the current mode to display the correct icon
 }
 
 const Header: React.FC<HeaderProps> = ({
-  onMenuClick,
   userInfo,
   onThemeToggle,
   darkMode,
 }) => {
   const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    if (location.pathname !== "/profile") {
+      navigate("/profile");
+    }
+  };
   return (
     <header className="bg-white dark:bg-gray-900 shadow-md p-2 flex justify-between items-center">
-      {/* Hamburger menu for mobile */}
-      <button className="md:hidden focus:outline-none" onClick={onMenuClick}>
-        <svg
-          className="h-6 w-6 text-gray-600 dark:text-gray-200"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
-
       <div
         onClick={() => navigate("/", { replace: true })}
         className="flex text-xl font-bold text-gray-800 dark:text-gray-200 cursor-pointer"
@@ -90,7 +76,7 @@ const Header: React.FC<HeaderProps> = ({
           className="h-14 w-14 rounded-full cursor-pointer"
           src={userInfo ? userInfo.profileImage : "#"}
           alt="Profile"
-          onClick={() => navigate("/profile", { replace: true })}
+          onClick={handleProfileClick}
         />
       </div>
     </header>

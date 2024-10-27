@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
@@ -25,7 +20,6 @@ import Chat from "./components/Chat";
 // import { useLocation } from "react-router-dom";
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userInfo, setUserInfo] = useState<userObj | null>(null);
   const [darkMode, setDarkMode] = useState<boolean>(
     localStorage.getItem("theme") === "dark"
@@ -48,7 +42,6 @@ function App() {
 
   return (
     <Router>
-      <LocationHandler setSidebarOpen={setSidebarOpen} />
       <Routes>
         <Route path="/login" element={<Login setUserInfo={setUserInfo} />} />
         <Route path="/signup" element={<SignUp />} />
@@ -57,8 +50,6 @@ function App() {
           path="/"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -72,8 +63,6 @@ function App() {
           path="/profile"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -87,8 +76,6 @@ function App() {
           path="/create"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -102,8 +89,6 @@ function App() {
           path="/posts/:postId"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -117,8 +102,6 @@ function App() {
           path="/posts/:postId/edit"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -132,8 +115,6 @@ function App() {
           path="/find-people"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -147,8 +128,6 @@ function App() {
           path="/conversations"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -162,8 +141,6 @@ function App() {
           path="/chat/:receiverId"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -177,8 +154,6 @@ function App() {
           path="/people/:id"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -192,8 +167,6 @@ function App() {
           path="/requests"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -207,8 +180,6 @@ function App() {
           path="/connections"
           element={
             <DashboardLayout
-              setSidebarOpen={setSidebarOpen}
-              sidebarOpen={sidebarOpen}
               darkMode={darkMode}
               userInfo={userInfo}
               handleThemeToggle={handleThemeToggle}
@@ -223,20 +194,5 @@ function App() {
     </Router>
   );
 }
-
-const LocationHandler = ({
-  setSidebarOpen,
-}: {
-  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
-  const location = useLocation();
-
-  useEffect(() => {
-    // Close the sidebar whenever the route changes
-    setSidebarOpen(false);
-  }, [location, setSidebarOpen]);
-
-  return null;
-};
 
 export default App;

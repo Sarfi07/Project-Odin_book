@@ -58,6 +58,12 @@ const Conversation: React.FC<ConversationProps> = ({ isDarkMode }) => {
             Conversations
           </h3>
           <div className="space-y-4">
+            {conversations.length === 0 && (
+              <p>
+                No Chat found. You can chat with you connected friends. Just go
+                to connections tab and start chatting. Happy chatting 😊.
+              </p>
+            )}
             {conversations.map((conversation) => (
               <div
                 key={conversation.id}

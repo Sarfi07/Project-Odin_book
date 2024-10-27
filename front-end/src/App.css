@@ -26,7 +26,7 @@ header {
 }
 
 aside {
-  height: calc(90vh);
+  height: 92vh;
 }
 
 .main-content {
@@ -41,26 +41,6 @@ aside {
 
 body {
   background-color: #243642;
-}
-
-.sidebar-enter {
-  opacity: 0;
-  transform: translateX(-100%);
-}
-.sidebar-enter-active {
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity 300ms, transform 300ms;
-}
-
-.sidebar-exit {
-  opacity: 1;
-  transform: translateX(0);
-}
-.sidebar-exit-active {
-  opacity: 0;
-  transform: translateX(-100%);
-  transition: opacity 300ms, transform 300ms;
 }
 
 @media (width < 768px) {

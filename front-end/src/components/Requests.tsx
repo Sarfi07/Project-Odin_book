@@ -111,6 +111,13 @@ const Requests: React.FC<Props> = ({ isDarkMode }) => {
         isDarkMode ? "bg-gray-800" : "bg-white"
       } p-4 rounded-lg shadow-md`}
     >
+      <h2
+        className={`font-bold text-lg ${
+          isDarkMode ? "text-white" : "text-black"
+        }`}
+      >
+        Follow Requests
+      </h2>
       {requests.length > 0 ? (
         requests.map((request) => (
           <div

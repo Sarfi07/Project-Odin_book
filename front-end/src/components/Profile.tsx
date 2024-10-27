@@ -6,6 +6,8 @@ import EditForm from "./utils/ProfileEditForm";
 import { PostType } from "./CustomTypes";
 import Post from "./utils/Post";
 import handleShare from "./utils/handleShare";
+import { useNavigate } from "react-router-dom";
+import closeIcon from "../assets/close.svg";
 
 interface ProfileProps {
   isDarkMode: boolean;
@@ -34,6 +36,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
   const [editFormOpen, setEditFormOpen] = useState(false);
   const [posts, setPosts] = useState<PostType[]>([]);
   const [linkCopied, setLinkCopied] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -160,6 +163,14 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
             isDarkMode ? "bg-gray-800" : "bg-gray-100"
           }`}
         >
+          <div className="text-right">
+            <button
+              className="bg-white rounded rounded-full display-block"
+              onClick={() => navigate("/", { replace: true })}
+            >
+              <img src={closeIcon} alt="Close this window" />
+            </button>
+          </div>
           {/* Profile Header */}
           <div className="flex flex-col items-center mb-6">
             <img
